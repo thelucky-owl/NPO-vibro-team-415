@@ -1,20 +1,40 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { View, Button, TouchableWithoutFeedback, Vibration } from 'react-native';
 
-export default function App() {
+const VibrationApp = () => {
+  const [isPressing, setIsPressing] = useState(false);
+
+  const handlePressIn = () => {
+    setIsPressing(true);
+    Vibration.vibrate();
+  };
+
+  const handlePressOut = () => {
+    setIsPressing(false);
+    Vibration.cancel();
+  };
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <TouchableWithoutFeedback
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+      >
+        <View
+          style={{
+            width: 200,
+            height: 100,
+            backgroundColor: isPressing ? 'green' : 'red',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 10,
+          }}
+        >
+          <Button title="Hold Me" onPress={() => {}} />
+        </View>
+      </TouchableWithoutFeedback>
     </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default VibrationApp;
