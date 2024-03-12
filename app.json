@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "demo-vibrations",
-    "slug": "demo-vibrations",
+    "name": "Npo-Vibro-Medialab",
+    "slug": "Npo-Vibro-Medialab",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -25,12 +25,6 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "2bdf9a71-7033-4e30-a7da-e68c01d71ec9"
-      }
-    },
-    "owner": "the-amazing-maze"
+    }
   }
 }
