@@ -3,7 +3,7 @@ import { View, StyleSheet, Button, Text, Vibration} from 'react-native';
 import { Audio } from 'expo-av';
 
 export default function App() {
-  // State variables for managing recording, permission response, and sound level
+  //State variables for managing recording, permission response, and sound level
   const [recording, setRecording] = useState();
   const [permissionResponse, requestPermission] = Audio.usePermissions();
   const [soundLevel, setSoundLevel] = useState(null);
