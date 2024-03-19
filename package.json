@@ -9,10 +9,12 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-community/slider": "^4.5.0",
     "expo": "~50.0.11",
-    "expo-av": "^13.10.5",
+    "expo-av": "~13.10.5",
     "expo-permissions": "^14.4.0",
     "expo-status-bar": "~1.11.1",
+    "expo-video-player": "^2.2.0",
     "react": "18.2.0",
     "react-native": "0.73.4",
     "react-native-sound-level": "^1.2.0"
