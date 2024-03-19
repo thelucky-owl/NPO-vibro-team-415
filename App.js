@@ -3,52 +3,55 @@ import { View, StyleSheet, Button, Text, Vibration} from 'react-native';
 import { Audio } from 'expo-av';
 
 export default function App() {
+  // State variables for managing recording, permission response, and sound level
   const [recording, setRecording] = useState();
   const [permissionResponse, requestPermission] = Audio.usePermissions();
   const [soundLevel, setSoundLevel] = useState(null);
 
+  // Function to start recording audio
   async function startRecording() {
     try {
+      // Request permission if not already granted
       if (permissionResponse.status !== 'granted') {
-        console.log('Requesting permission..');
         await requestPermission();
       }
+      // Set audio mode for recording
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: true,
         playsInSilentModeIOS: true,
       });
 
-      console.log('Starting recording..');
+      // Create a new recording instance
       const { recording } = await Audio.Recording.createAsync(
         Audio.RecordingOptionsPresets.HighQuality
       );
       setRecording(recording);
 
+      // Update sound level when recording status changes
       recording.setOnRecordingStatusUpdate((status) => {
         if (status.isRecording) {
-          // console.log(status)
-          setSoundLevel(status.metering + 100);
-           if ((status.metering + 100) > 30) {
-            Vibration.vibrate((Math.floor((status.metering) + 100) / 10) * 80)
-           };
+          setSoundLevel(status.metering + 100); // Adjust sound level for display
+          // Vibrate if sound level exceeds a threshold
+          if ((status.metering + 100) > 30) {
+            Vibration.vibrate((Math.floor((status.metering) + 100) / 10) * 80);
+          }
         }
       });
-
-      console.log('Recording started');
     } catch (err) {
       console.error('Failed to start recording', err);
     }
   }
 
+  // Function to stop recording audio
   async function stopRecording() {
-    console.log('Stopping recording..');
-    await recording.stopAndUnloadAsync()
+    // Stop and unload the recording
+    await recording.stopAndUnloadAsync();
     setRecording(undefined);
+    // Set audio mode to disallow recording
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
     });
   }
-
   return (
     <View style={styles.container}>
       <Text style={styles.volumeText}>
