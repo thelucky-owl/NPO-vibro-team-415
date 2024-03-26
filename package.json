@@ -1,26 +1,16 @@
 {
   "name": "npo-vibro-medialab",
   "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
   "dependencies": {
-    "@react-native-community/slider": "^4.5.0",
-    "expo": "~50.0.11",
-    "expo-av": "~13.10.5",
-    "expo-permissions": "^14.4.0",
-    "expo-status-bar": "~1.11.1",
-    "expo-video-player": "^2.2.0",
-    "react": "18.2.0",
-    "react-native": "0.73.4",
-    "react-native-sound-level": "^1.2.0"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.20.0"
-  },
-  "private": true
+    "pitchy": "^4.1.0"
+  }
 }

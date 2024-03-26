@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Test</title>
+    <script src="https://unpkg.com/meyda/dist/web/meyda.min.js"></script>
+    <script defer src="./index.js" type="module"></script>
+</head>
+<body>
+    <div>
+      <span id="pitch-label" class="label">Pitch</span>
+      <span id="pitch" aria-labelledby="pitch-label">0</span>
+    </div>
+    <div>
+      <span id="clarity-label" class="label">Clarity</span>
+      <span id="clarity" aria-labelledby="clarity-label">0</span>
+    </div>
+    <audio
+        controls
+        loop
+        crossorigin="anonymous"
+        id="audio"
+        src="./samples/europapaInstrumental.mp3"
+    ></audio>
+    <audio
+        controls
+        loop
+        crossorigin="anonymous"
+        id="audio2"
+        src="./samples/europapaInstrumental.mp3"
+    ></audio>
+    <button id="resume-button">Resume AudioContext</button>
+</body>
+</html>
