@@ -1,20 +1,38 @@
-import React, { useState } from "react";
-import { View, StyleSheet, Button, Text, Vibration } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, StyleSheet, Button, Text, Vibration} from "react-native";
 import { Audio, ResizeMode } from "expo-av";
 import VideoPlayer from "expo-video-player";
+// import socket from "./utils/socket";
+import {io} from "socket.io-client";
 
 import Europapa from "./samples/europapaMusicVideo.mp4";
 
 export default function App() {
+  const port = "3000"
+  // const socket = io("http://192.168.1.181:3000/" );//home
+  const socket = io("http://145.137.62.78:3000/" )//school
+  
+  useEffect(()=>{
+
+    socket.on("connect", () => {
+      console.log(socket.connected); // true
+    });
+    socket.on("hello",(arg)=>{
+      setPlayVideo(arg)      
+    })
+  },[])
   // State variables for managing recording, permission response, and sound level
   const [recording, setRecording] = useState();
   const [permissionResponse, requestPermission] = Audio.usePermissions();
   const [soundLevel, setSoundLevel] = useState(null);
+  const [playVideo,setPlayVideo]=useState(false)
+  // const [status, setStatus] = React.useState({});
 
   const Video = () => {
     return (
       <View>
         <VideoPlayer
+        //  onPlaybackStatusUpdate={status =>  setStatus(() => status)}
           videoProps={{
             shouldPlay: true,
             resizeMode: ResizeMode.CONTAIN,
@@ -23,6 +41,14 @@ export default function App() {
             source: Europapa,
           }}
         />
+        
+        {/* <Button
+         title={status.isPlaying ? 'Pause' : 'Play'}
+         onPress={() =>
+           {console.log(status)}
+         }
+        ></Button> */}
+        <Button title={"emit"}onPress={()=>socket.emit("hey","hey",(response)=>{console.log(response)})}></Button>
       </View>
     );
   };
