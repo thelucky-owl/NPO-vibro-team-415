@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Platform, Text, Vibration, View, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
 
+// Separator component for platform-specific styling
 const Separator = () => {
   return <View style={Platform.OS === 'android' ? styles.separator : null} />;
 };
 
 const App = () => {
+  // Array of input time ranges
   const inputTimes = [
     ['00:00:05:310', '00:00:05:390'],
     ['00:00:17:320', '00:00:17:390'],
@@ -80,12 +82,14 @@ const App = () => {
     //30ms
     ['00:00:52:190', '00:00:52:220'],
     ['00:00:52:570', '00:00:52:600'],
-
   ];
-  const [isVibrating, setIsVibrating] = useState(false);
-  const [timer, setTimer] = useState('00:00:00:000');
-  const [startTime, setStartTime] = useState(0);
 
+  // State variables
+  const [isVibrating, setIsVibrating] = useState(false); // State to track vibration status
+  const [timer, setTimer] = useState('00:00:00:000'); // State for current timer display
+  const [startTime, setStartTime] = useState(0); // State to track start time
+
+  // Effect hook to update timer
   useEffect(() => {
     let intervalId;
     if (isVibrating) {
@@ -100,16 +104,19 @@ const App = () => {
     return () => clearInterval(intervalId);
   }, [isVibrating, startTime]);
 
+  // Function to start vibration loop
   const startVibrationLoop = () => {
     setIsVibrating(true);
     setStartTime(new Date().getTime());
   };
 
+  // Function to stop vibration loop
   const stopVibrationLoop = () => {
     setIsVibrating(false);
     Vibration.cancel();
   };
 
+  // Effect hook to handle vibration
   useEffect(() => {
     if (isVibrating) {
       const currentTime = parseTime(timer);
@@ -123,11 +130,13 @@ const App = () => {
     }
   }, [isVibrating, timer]);
 
+  // Function to parse time string into milliseconds
   const parseTime = (timeString) => {
     const [hours, minutes, seconds, milliseconds] = timeString.split(':').map(Number);
     return hours * 3600000 + minutes * 60000 + seconds * 1000 + milliseconds;
   };
 
+  // Function to format milliseconds into time string
   const formatTime = (time) => {
     const pad = (num) => num.toString().padStart(2, '0');
     const hours = Math.floor(time / 3600000);
@@ -139,7 +148,7 @@ const App = () => {
     return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}:${milliseconds.toString().padStart(3, '0')}`;
   };
 
-
+  // Render function
   return (
     <SafeAreaView style={styles.container}>
       <Text style={[styles.header, styles.paragraph]}>NPO Vibro</Text>
@@ -161,6 +170,7 @@ const App = () => {
   );
 };
 
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
