@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Button, Text, Vibration } from "react-native";
-import { Audio, ResizeMode } from "expo-av";
+import { View, StyleSheet, Text, Vibration, TouchableWithoutFeedback} from "react-native";
+import { ResizeMode } from "expo-av";
 import VideoPlayer from "expo-video-player";
 
 import Europapa from "./samples/europapaMusicVideo.mp4";
@@ -17,15 +17,13 @@ export default function App() {
           videoProps={{
             shouldPlay: playState,
             resizeMode: ResizeMode.CONTAIN,
+            useNativeControls: true,
             debug: true,
             // ❗ source is required https://docs.expo.io/versions/latest/sdk/video/#props
             source: Europapa,
           }}
         />
-        <Button
-        title={playState ? "Stop" : "Start"}
-        onPress={() => playState ? setPlayState(false) : setPlayState(true)}
-      />
+
       </View>
     );
   };
@@ -33,16 +31,42 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Video />
+      
+      <Video style={styles.videoScreen}/>
+      <TouchableWithoutFeedback onPress={() => playState ? setPlayState(false) : setPlayState(true)}>
+      <View style={styles.buttonContainer} >
+        <Text style = {styles.buttonText}>
+          {playState ? "Stop" : "Start"}
+        </Text>
+        </View>
+        </TouchableWithoutFeedback>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 4,
     justifyContent: "center",
+    alignItems: "center",
     backgroundColor: "#ecf0f1",
     padding: 10,
   },
+  videoScreen:{
+    width: "100%",
+    height: "80%"
+  },
+
+  buttonContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent:"center",
+    backgroundColor:"#FF6D00",
+    width: "20%",
+  },
+  buttonText: {
+    alignContent: "center",
+    color: "white"
+  },
+  
 });
