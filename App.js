@@ -93,7 +93,7 @@ export default function App() {
   // Effect hook to update timer
   useEffect(() => {
     let intervalId;
-    if (playState) {
+    if (isVibrating) {
       startVibrationLoop()
       intervalId = setInterval(() => {
         const elapsedTime = new Date().getTime() - startTime;
@@ -105,7 +105,7 @@ export default function App() {
     }
 
     return () => clearInterval(intervalId);
-  }, [playState, startTime]);
+  }, [isVibrating, startTime]);
 
   // Function to start vibration loop
   const startVibrationLoop = () => {
@@ -173,7 +173,7 @@ export default function App() {
     <View style={styles.container}>
       
       <Video style={styles.videoScreen}/>
-      <TouchableWithoutFeedback onPress={() => playState ? setPlayState(false) : setPlayState(true)}>
+      <TouchableWithoutFeedback onPress={() => playState ? (setPlayState(false), setIsVibrating(false)) : (setPlayState(true), setIsVibrating(true))}>
       <View style={styles.buttonContainer} >
         <Text style = {styles.buttonText}>
           {playState ? "Stop" : "Start"}
