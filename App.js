@@ -10,7 +10,10 @@ import Europapa from "./samples/europapaMusicVideo.mp4";
 export default function App() {
   const port = "3000"
   // const socket = io("http://192.168.1.181:3000/" );//home
-  const socket = io("http://145.137.62.78:3000/" )//school
+  // const socket = io("http://145.137.62.78:3000/" )//school
+  const socket = io("https://npovibro.webpubsub.azure.com", {
+    path: "/clients/socketio/hubs/Hub",
+});
   
   useEffect(()=>{
 
@@ -26,6 +29,8 @@ export default function App() {
   const [permissionResponse, requestPermission] = Audio.usePermissions();
   const [soundLevel, setSoundLevel] = useState(null);
   const [playVideo,setPlayVideo]=useState(false)
+  const [play,setPlay]=useState(false)
+
   // const [status, setStatus] = React.useState({});
 
   const Video = () => {
@@ -34,20 +39,19 @@ export default function App() {
         <VideoPlayer
         //  onPlaybackStatusUpdate={status =>  setStatus(() => status)}
           videoProps={{
-            shouldPlay: true,
+            shouldPlay: false,
             resizeMode: ResizeMode.CONTAIN,
             debug: true,
             // ❗ source is required https://docs.expo.io/versions/latest/sdk/video/#props
             source: Europapa,
           }}
         />
-        
         {/* <Button
          title={status.isPlaying ? 'Pause' : 'Play'}
          onPress={() =>
-           {console.log(status)}
-         }
-        ></Button> */}
+          {console.log(status)}
+        }
+      ></Button> */}
         <Button title={"emit"}onPress={()=>socket.emit("hey","hey",(response)=>{console.log(response)})}></Button>
       </View>
     );
