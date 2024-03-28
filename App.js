@@ -1,13 +1,16 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text, Vibration, TouchableWithoutFeedback} from "react-native";
+import { View, StyleSheet, Text, Vibration, TouchableWithoutFeedback, Dimensions} from "react-native";
 import { ResizeMode } from "expo-av";
 import VideoPlayer from "expo-video-player";
 
 import Europapa from "./samples/europapaMusicVideo.mp4";
 
 export default function App() {
-  // State variables for managing recording, permission response, and sound level
+  // State variables
   const [playState, setPlayState] = useState(false);
+
+  const {width} = Dimensions.get("window").width;
+  const {height} = Dimensions.get("window").height;
 
 
   const Video = () => {
@@ -16,8 +19,8 @@ export default function App() {
         <VideoPlayer
           videoProps={{
             shouldPlay: playState,
-            resizeMode: ResizeMode.CONTAIN,
-            useNativeControls: true,
+            resizeMode: ResizeMode.COVER,
+            useNativeControls: false,
             debug: true,
             // ❗ source is required https://docs.expo.io/versions/latest/sdk/video/#props
             source: Europapa,
@@ -47,6 +50,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 4,
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#ecf0f1",
@@ -54,7 +58,7 @@ const styles = StyleSheet.create({
   },
   videoScreen:{
     width: "100%",
-    height: "80%"
+    height: "100%"
   },
 
   buttonContainer: {
