@@ -217,6 +217,7 @@ const App = () => {
     }
   }, [isVibrating, timer, inputTimes]);
 
+  
   // Function to parse time string into milliseconds
   const parseTime = (timeString) => {
     const [minutes, seconds, milliseconds] = timeString.split(':').map(Number);
