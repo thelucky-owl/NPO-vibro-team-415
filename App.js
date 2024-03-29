@@ -246,7 +246,7 @@ socket.on("play",()=>{
   };
 function dev(){
   console.log(devButton)
-  if(devButton >9){
+  if(devButton >14){
     return
   }else{
     setDevButton(devButton+1)
