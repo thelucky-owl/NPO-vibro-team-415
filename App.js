@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Platform, Text, Vibration, View, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
+import { Button, Platform, Text, Vibration, View, SafeAreaView, StyleSheet, ScrollView, Image } from 'react-native';
 import {io, Socket} from "socket.io-client"
 
 // Separator component for platform-specific styling
@@ -12,7 +12,7 @@ const App = () => {
   const inputTimes = [
     //Intro
 
-    ['00:00:05:300', '00:00:05:380'],
+    ['00:05:300', '00:05:380'],
     // "Let's come together"
     ['00:06:610', '00:06:730'],
     ['00:07:255', '00:07:350'],
@@ -180,7 +180,9 @@ const App = () => {
 });
 socket.on("play",()=>{
   toggleVibrationLoop()
-console.log("received")})
+}
+
+)
 
  // Function to toggle vibration loop
  const toggleVibrationLoop = () => {
@@ -252,22 +254,26 @@ function dev(){
 }
   // Render function
   return (
+    
     <SafeAreaView style={styles.container}>
+      <Image source={require('./assets/icon.png')}
+      style={styles.image}
+      resizeMode='cover'
+      />
       <Text style={[styles.header, styles.paragraph]} onPress={dev}>NPO Vibro</Text>
       <View>
-      <Button color="#FF6D00" title={isVibrating ? "Stop Vibration" : "Start Vibration Pattern"} onPress={toggleVibrationLoop} />
-        {devButton>9 ? <Button title='send to server' onPress={()=>socket.emit("hey","hey")}></Button>:null}
+        {devButton>14 ? <Button title='send to server' onPress={()=>socket.emit("hey","hey")}></Button>:null}
       </View>
       <Separator />
       <Text style={styles.paragraph}>Current Time: {timer}</Text>
-      <Text style={styles.paragraph}>Input Times:</Text>
-      <ScrollView style={styles.scrollView}>
+      {/* <Text style={styles.paragraph}>Input Times:</Text> */}
+      {/* <ScrollView style={styles.scrollView}>
         {inputTimes.map((timeRange, index) => (
           <Text key={index} style={styles.paragraph}>
             {`Start: ${timeRange[0]}, End: ${timeRange[1]}`}
           </Text>
         ))}
-      </ScrollView>
+      </ScrollView> */}
     </SafeAreaView>
   );
 };
@@ -297,6 +303,11 @@ const styles = StyleSheet.create({
   scrollView: {
     maxHeight: 300, // Set the max height as needed
   },
+  image:{
+    height:100,
+    width:100,
+    alignSelf:'center'
+  }
 });
 
 export default App;
