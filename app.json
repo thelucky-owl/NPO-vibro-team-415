@@ -21,7 +21,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.lfdejong.NpoVibroMedialab"
     },
     "web": {
       "favicon": "./assets/favicon.png"

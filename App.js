@@ -260,6 +260,10 @@ function dev(){
       style={styles.image}
       resizeMode='cover'
       />
+      <Image source={require('./assets/europapa-gif.gif')}
+      style={styles.image}
+      resizeMode='cover'
+      />
       <Text style={[styles.header, styles.paragraph]} onPress={dev}>NPO Vibro</Text>
       <View>
         {devButton>14 ? <Button title='send to server' onPress={()=>socket.emit("hey","hey")}></Button>:null}
