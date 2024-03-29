@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text, Vibration, TouchableWithoutFeedback, Dimensions, Button, Platform, SafeAreaView, ScrollView} from "react-native";
+import { View, StyleSheet, Text, Vibration, TouchableWithoutFeedback, Dimensions, Button, Platform, SafeAreaView, ScrollView } from "react-native";
 import { ResizeMode } from "expo-av";
 import VideoPlayer from "expo-video-player";
 
-// Separator component for platform-specific styling
-const Separator = () => {
-  return <View style={Platform.OS === 'android' ? styles.separator : null} />;
-};
+import Europapa from "./samples/europapaCroppedAndTrimmed.mp4";
 
 export default function App() {
   // Array of input time ranges
@@ -34,7 +31,7 @@ export default function App() {
 
     // Boom
     ['00:17:320', '00:17:390'],
-    
+
     // Beats
     ['00:23:300', '00:23:440'],
     ['00:23:490', '00:23:630'],
@@ -74,7 +71,7 @@ export default function App() {
     //fast
     ['00:34:920', '00:34:960'],
     ['00:35:105', '00:35:145'],
-    ['00:35:295', '00:35:335']
+    ['00:35:295', '00:35:335'],
 
     //normal
     ['00:35:670', '00:35:710'],
@@ -172,74 +169,29 @@ export default function App() {
 
   // State variables
   const [playState, setPlayState] = useState(false);
-  const [isVibrating, setIsVibrating] = useState(false); // State to track vibration status
-  const [timer, setTimer] = useState('00:00:000'); // State for current timer display
-  const [startTime, setStartTime] = useState(0); // State to track start time
 
-
-  // Function to toggle vibration loop
-  const toggleVibrationLoop = () => {
-    setIsVibrating(!isVibrating);
-    if (!isVibrating) {
-      setStartTime(new Date().getTime());
-    } else {
-      Vibration.cancel();
-    }
-  };
-
-  // Effect hook to update timer
-  useEffect(() => {
-    let intervalId;
-    if (isVibrating) {
-      intervalId = setInterval(() => {
-        const elapsedTime = new Date().getTime() - startTime;
-        setTimer(formatTime(elapsedTime));
-      }, 10);
-    } else {
-      setTimer('00:00:000');
-    }
-
-    return () => clearInterval(intervalId);
-  }, [isVibrating, startTime]);
-
-  // Effect hook to handle vibration
-  useEffect(() => {
-    if (isVibrating) {
-      const currentTime = parseTime(timer);
-      inputTimes.forEach((timeRange) => {
-        const startTime = parseTime(timeRange[0]);
-        const endTime = parseTime(timeRange[1]);
-        if (currentTime >= startTime && currentTime <= endTime) {
-          Vibration.vibrate();
-        }
-      });
-      // Stop vibration if timer exceeds the specified limit
-      if (timer >= '01:15:570') {
-        setIsVibrating(false);
-        Vibration.cancel();
-      }
-    }
-  }, [isVibrating, timer, inputTimes]);
-
-  
   // Function to parse time string into milliseconds
   const parseTime = (timeString) => {
     const [minutes, seconds, milliseconds] = timeString.split(':').map(Number);
     return minutes * 60000 + seconds * 1000 + milliseconds;
   };
 
-  // Function to format milliseconds into time string
-  const formatTime = (time) => {
-    const pad = (num) => num.toString().padStart(2, '0');
-    const minutes = Math.floor(time / 60000);
-    time %= 60000;
-    const seconds = Math.floor(time / 1000);
-    const milliseconds = time % 1000;
-    return `${pad(minutes)}:${pad(seconds)}:${milliseconds.toString().padStart(3, '0')}`;
-  };
+  // Preprocess inputTimes array to convert time strings to milliseconds
+  const processedInputTimes = inputTimes.map(([startTime, endTime]) => [
+    parseTime(startTime),
+    parseTime(endTime)
+  ]);
 
-  // Render function
   const Video = () => {
+    const handlePlaybackStatusUpdate = (e) => {
+      processedInputTimes.forEach(([startTime, endTime]) => {
+        if (e.positionMillis >= startTime && e.positionMillis <= endTime) {
+          Vibration.vibrate();
+        }
+      });
+      console.log(e.positionMillis);
+    };
+  
     return (
       <View style={styles.container}>
         <VideoPlayer
@@ -250,8 +202,8 @@ export default function App() {
             debug: true,
             source: Europapa,
           }}
+          playbackCallback={handlePlaybackStatusUpdate} // Pass the function directly
         />
-
       </View>
     );
   };
@@ -259,18 +211,18 @@ export default function App() {
   // Render function
   return (
     <View style={styles.container}>
-      
-      <Video style={styles.videoScreen}/>
-      <TouchableWithoutFeedback onPress={() => playState ? (setPlayState(false), setIsVibrating(false)) : (setPlayState(true), setIsVibrating(true))}>
-      <View style={styles.buttonContainer} >
-        <Text style = {styles.buttonText}>
-          {playState ? "Stop" : "Start"}
-        </Text>
+
+      <Video style={styles.videoScreen} />
+      <TouchableWithoutFeedback onPress={() => playState ? setPlayState(false) : setPlayState(true)}>
+        <View style={styles.buttonContainer} >
+          <Text style={styles.buttonText}>
+            {playState ? "Stop" : "Start"}
+          </Text>
         </View>
-        </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
     </View>
-    )
-  }
+  );
+}
 
 // Styles
 const styles = StyleSheet.create({
@@ -282,7 +234,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ecf0f1",
     padding: 10,
   },
-  videoScreen:{
+  videoScreen: {
     width: "100%",
     height: "100%"
   },
@@ -290,13 +242,13 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
     alignItems: "center",
-    justifyContent:"center",
-    backgroundColor:"#FF6D00",
+    justifyContent: "center",
+    backgroundColor: "#FF6D00",
     width: "20%",
   },
   buttonText: {
     alignContent: "center",
     color: "white"
   },
-  
+
 });
