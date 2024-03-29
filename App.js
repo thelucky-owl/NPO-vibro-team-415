@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Platform, Text, Vibration, View, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
+import {io, Socket} from "socket.io-client"
 
 // Separator component for platform-specific styling
 const Separator = () => {
@@ -10,7 +11,8 @@ const App = () => {
   // Array of input time ranges
   const inputTimes = [
     //Intro
-    ['00:05:300', '00:05:380'],
+
+    ['00:00:05:300', '00:00:05:380'],
     // "Let's come together"
     ['00:06:610', '00:06:730'],
     ['00:07:255', '00:07:350'],
@@ -72,7 +74,7 @@ const App = () => {
     //fast
     ['00:34:920', '00:34:960'],
     ['00:35:105', '00:35:145'],
-    ['00:35:295', '00:35:335']
+    ['00:35:295', '00:35:335'],
 
     //normal
     ['00:35:670', '00:35:710'],
@@ -172,18 +174,25 @@ const App = () => {
   const [isVibrating, setIsVibrating] = useState(false); // State to track vibration status
   const [timer, setTimer] = useState('00:00:000'); // State for current timer display
   const [startTime, setStartTime] = useState(0); // State to track start time
+  const [devButton,setDevButton] = useState(0)
+  const socket = io("https://npovibro.webpubsub.azure.com", {
+    path: "/clients/socketio/hubs/Hub",
+});
+socket.on("play",()=>{
+  toggleVibrationLoop()
+console.log("received")})
 
-  // Function to toggle vibration loop
-  const toggleVibrationLoop = () => {
-    setIsVibrating(!isVibrating);
-    if (!isVibrating) {
-      setStartTime(new Date().getTime());
-    } else {
-      Vibration.cancel();
-    }
-  };
+ // Function to toggle vibration loop
+ const toggleVibrationLoop = () => {
+  setIsVibrating(!isVibrating);
+  if (!isVibrating) {
+    setStartTime(new Date().getTime());
+  } else {
+    Vibration.cancel();
+  }
+};
 
-  // Effect hook to update timer
+// Effect hook to update timer
   useEffect(() => {
     let intervalId;
     if (isVibrating) {
@@ -233,13 +242,21 @@ const App = () => {
     const milliseconds = time % 1000;
     return `${pad(minutes)}:${pad(seconds)}:${milliseconds.toString().padStart(3, '0')}`;
   };
-
+function dev(){
+  console.log(devButton)
+  if(devButton >9){
+    return
+  }else{
+    setDevButton(devButton+1)
+  }
+}
   // Render function
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={[styles.header, styles.paragraph]}>NPO Vibro</Text>
+      <Text style={[styles.header, styles.paragraph]} onPress={dev}>NPO Vibro</Text>
       <View>
-        <Button color="#FF6D00" title={isVibrating ? "Stop Vibration" : "Start Vibration Pattern"} onPress={toggleVibrationLoop} />
+      <Button color="#FF6D00" title={isVibrating ? "Stop Vibration" : "Start Vibration Pattern"} onPress={toggleVibrationLoop} />
+        {devButton>9 ? <Button title='send to server' onPress={()=>socket.emit("hey","hey")}></Button>:null}
       </View>
       <Separator />
       <Text style={styles.paragraph}>Current Time: {timer}</Text>
