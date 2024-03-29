@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Button, Platform, Text, Vibration, View, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
+import React, { useState, useEffect } from "react";
+import { View, StyleSheet, Text, Vibration, TouchableWithoutFeedback, Dimensions, Button, Platform, SafeAreaView, ScrollView} from "react-native";
+import { ResizeMode } from "expo-av";
+import VideoPlayer from "expo-video-player";
 
 // Separator component for platform-specific styling
 const Separator = () => {
   return <View style={Platform.OS === 'android' ? styles.separator : null} />;
 };
 
-const App = () => {
+export default function App() {
   // Array of input time ranges
   const inputTimes = [
     //Intro
@@ -169,9 +171,11 @@ const App = () => {
   ];
 
   // State variables
+  const [playState, setPlayState] = useState(false);
   const [isVibrating, setIsVibrating] = useState(false); // State to track vibration status
   const [timer, setTimer] = useState('00:00:000'); // State for current timer display
   const [startTime, setStartTime] = useState(0); // State to track start time
+
 
   // Function to toggle vibration loop
   const toggleVibrationLoop = () => {
@@ -210,7 +214,7 @@ const App = () => {
         }
       });
       // Stop vibration if timer exceeds the specified limit
-      if (timer >= '03:21:570') {
+      if (timer >= '01:15:570') {
         setIsVibrating(false);
         Vibration.cancel();
       }
@@ -235,51 +239,64 @@ const App = () => {
   };
 
   // Render function
-  return (
-    <SafeAreaView style={styles.container}>
-      <Text style={[styles.header, styles.paragraph]}>NPO Vibro</Text>
-      <View>
-        <Button color="#FF6D00" title={isVibrating ? "Stop Vibration" : "Start Vibration Pattern"} onPress={toggleVibrationLoop} />
+  const Video = () => {
+    return (
+      <View style={styles.container}>
+        <VideoPlayer
+          videoProps={{
+            shouldPlay: playState,
+            resizeMode: ResizeMode.COVER,
+            useNativeControls: false,
+            debug: true,
+            source: Europapa,
+          }}
+        />
+
       </View>
-      <Separator />
-      <Text style={styles.paragraph}>Current Time: {timer}</Text>
-      <Text style={styles.paragraph}>Input Times:</Text>
-      <ScrollView style={styles.scrollView}>
-        {inputTimes.map((timeRange, index) => (
-          <Text key={index} style={styles.paragraph}>
-            {`Start: ${timeRange[0]}, End: ${timeRange[1]}`}
-          </Text>
-        ))}
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
+    );
+  };
+
+  // Render function
+  return (
+    <View style={styles.container}>
+      
+      <Video style={styles.videoScreen}/>
+      <TouchableWithoutFeedback onPress={() => playState ? (setPlayState(false), setIsVibrating(false)) : (setPlayState(true), setIsVibrating(true))}>
+      <View style={styles.buttonContainer} >
+        <Text style = {styles.buttonText}>
+          {playState ? "Stop" : "Start"}
+        </Text>
+        </View>
+        </TouchableWithoutFeedback>
+    </View>
+    )
+  }
 
 // Styles
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingTop: 44,
-    padding: 8,
+    flex: 4,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#ecf0f1",
+    padding: 10,
   },
-  header: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
+  videoScreen:{
+    width: "100%",
+    height: "100%"
   },
-  paragraph: {
-    margin: 12,
-    textAlign: 'center',
-  },
-  separator: {
-    marginVertical: 8,
-    borderBottomColor: '#737373',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
-  scrollView: {
-    maxHeight: 300, // Set the max height as needed
-  },
-});
 
-export default App;
+  buttonContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent:"center",
+    backgroundColor:"#FF6D00",
+    width: "20%",
+  },
+  buttonText: {
+    alignContent: "center",
+    color: "white"
+  },
+  
+});
