@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Platform, Text, Vibration, View, SafeAreaView, StyleSheet, ScrollView, Image } from 'react-native';
-import {io, Socket} from "socket.io-client"
+import {socket} from './socket.js'
 
 // Separator component for platform-specific styling
 const Separator = () => {
@@ -175,14 +175,23 @@ const App = () => {
   const [timer, setTimer] = useState('00:00:000'); // State for current timer display
   const [startTime, setStartTime] = useState(0); // State to track start time
   const [devButton,setDevButton] = useState(0)
-  const socket = io("https://npovibro.webpubsub.azure.com", {
-    path: "/clients/socketio/hubs/Hub",
-});
-socket.on("play",()=>{
-  toggleVibrationLoop()
-}
+  // const [socket, setSocket] = useState(null)
+  // const [sendToServer, setSendToServer] = useState(false)
 
-)
+  const [isConnected, setIsConnected] = useState(socket.connected);
+  const [startVideo, setStartVideo] = useState([]);
+
+
+  useEffect(() => {
+    function onStartVideo() {
+      console.log("play video")
+      toggleVibrationLoop()
+    }
+    socket.on('startVideoServer', onStartVideo);
+    return () => {
+      socket.off('startVideoServer', onStartVideo);
+    };
+  }, []);
 
  // Function to toggle vibration loop
  const toggleVibrationLoop = () => {
@@ -261,15 +270,15 @@ function dev(){
       resizeMode='cover'
       />
       <Image source={require('./assets/europapa-gif.gif')}
-      style={styles.image}
+      style={styles.gif}
       resizeMode='cover'
       />
       <Text style={[styles.header, styles.paragraph]} onPress={dev}>NPO Vibro</Text>
       <View>
-        {devButton>14 ? <Button title='send to server' onPress={()=>socket.emit("hey","hey")}></Button>:null}
       </View>
       <Separator />
       <Text style={styles.paragraph}>Current Time: {timer}</Text>
+        {devButton>14 ? <Button title='send to server' onPress={()=>socket.emit('startVideoClient')}></Button>:null}
       {/* <Text style={styles.paragraph}>Input Times:</Text> */}
       {/* <ScrollView style={styles.scrollView}>
         {inputTimes.map((timeRange, index) => (
@@ -310,6 +319,11 @@ const styles = StyleSheet.create({
   image:{
     height:100,
     width:100,
+    alignSelf:'center'
+  },
+  gif:{
+    height:100,
+    width:400,
     alignSelf:'center'
   }
 });
