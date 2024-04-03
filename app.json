@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Npo-Vibro-Medialab",
+    "name": "Npo Vibro Demo",
     "slug": "npovibro",
     "version": "2.0.0",
     "orientation": "portrait",
@@ -15,8 +15,7 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "requireFullScreen": true
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
@@ -28,18 +27,11 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      [
-        "expo-screen-orientation",
-        {
-          "initialOrientation": "PORTRAIT"
-        }
-      ]
-    ],
     "extra": {
       "eas": {
         "projectId": "d372aabf-8720-4e8f-83c5-4059978d1932"
       }
-    }
+    },
+    "owner": "the-amazing-maze"
   }
 }
