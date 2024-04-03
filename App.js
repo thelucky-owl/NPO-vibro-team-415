@@ -245,11 +245,11 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" options={{ title: 'Home' }}>
+        <Stack.Screen name="Home" options={{ title: 'NPO Vibro' }}>
           {(props) => <HomeScreen {...props} inputTimes={inputTimes} />}
         </Stack.Screen>
-        <Stack.Screen name="WithVideoPlayer" component={AppWithVideoPlayer} />
-        <Stack.Screen name="WithoutVideoPlayer" component={AppWithoutVideoPlayer} />
+        <Stack.Screen name="WithVideoPlayer" component={AppWithVideoPlayer} options={{ headerShown: false }}  />
+        <Stack.Screen name="WithoutVideoPlayer" component={AppWithoutVideoPlayer} options={{ title: 'NPO Vibro, zonder videospeler' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
