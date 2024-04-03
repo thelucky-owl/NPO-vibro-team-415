@@ -37,3 +37,5 @@ yarn-error.*
 /samples/europapa+Instrumental.aup3
 /samples/europapa+Instrumental.aup3-shm
 /samples/europapa+Instrumental.aup3-wal
+
+.idea

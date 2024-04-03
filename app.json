@@ -2,8 +2,8 @@
   "expo": {
     "name": "Npo-Vibro-Medialab",
     "slug": "npovibro",
-    "version": "1.0.0",
-    "orientation": "portait",
+    "version": "2.0.0",
+    "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
@@ -38,9 +38,8 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "e7987da6-bbbb-418f-a26a-3bdfa19739e8"
+        "projectId": "d372aabf-8720-4e8f-83c5-4059978d1932"
       }
-    },
-    "owner": "olevanderheiden"
+    }
   }
 }
