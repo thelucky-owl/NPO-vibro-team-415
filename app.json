@@ -3,7 +3,7 @@
     "name": "Npo-Vibro-Medialab",
     "slug": "npovibro",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "portait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "requireFullScreen": true
     },
     "android": {
       "adaptiveIcon": {
@@ -27,6 +28,14 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "plugins": [
+      [
+        "expo-screen-orientation",
+        {
+          "initialOrientation": "PORTRAIT"
+        }
+      ]
+    ]
     "extra": {
       "eas": {
         "projectId": "e7987da6-bbbb-418f-a26a-3bdfa19739e8"
