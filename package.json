@@ -14,6 +14,7 @@
     "@react-navigation/native-stack": "^6.9.26",
     "@react-navigation/routers": "^6.1.9",
     "@react-navigation/stack": "^6.3.29",
+    "eas-cli": "^7.6.2",
     "expo": "~50.0.11",
     "expo-av": "~13.10.5",
     "expo-permissions": "^14.4.0",
@@ -24,6 +25,8 @@
     "react-native": "0.73.4",
     "react-native-responsive-screen": "^1.4.2",
     "react-native-sound-level": "^1.2.0"
+    "react-native-sound-level": "^1.2.0",
+    "expo-dev-client": "~3.3.11"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
