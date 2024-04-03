@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "Npo-Vibro-Medialab",
-    "slug": "Npo-Vibro-Medialab",
-    "version": "1.0.0",
+    "slug": "npovibro",
+    "version": "1.1.0",
     "orientation": "landscape",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -21,10 +21,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.team415.npoVibro"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e7987da6-bbbb-418f-a26a-3bdfa19739e8"
+      }
+    },
+    "owner": "olevanderheiden"
   }
 }
