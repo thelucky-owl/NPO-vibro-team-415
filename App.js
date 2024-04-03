@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text, Vibration, TouchableWithoutFeedback, Dimensions, Button, Platform, SafeAreaView, ScrollView } from "react-native";
-import { ResizeMode } from "expo-av";
-import VideoPlayer from "expo-video-player";
+import React from 'react';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { NavigationContainer } from "@react-navigation/native";
+import HomeScreen from './HomeScreen';
+import AppWithVideoPlayer from './AppWithVideoPlayer';
+import AppWithoutVideoPlayer from './AppWithoutVideoPlayer';
 
-import Europapa from "./samples/europapaCroppedAndTrimmed.mp4";
+const Stack = createNativeStackNavigator();
 
-export default function App() {
-  // Array of input time ranges
+const App = () => {
   const inputTimes = [
     //Intro
     ['00:05:300', '00:05:380'],
@@ -31,7 +32,7 @@ export default function App() {
 
     // Boom
     ['00:17:320', '00:17:390'],
-
+    
     // Beats
     ['00:23:300', '00:23:440'],
     ['00:23:490', '00:23:630'],
@@ -163,92 +164,95 @@ export default function App() {
     ['00:59:290', '00:59:330'],
     ['00:59:665', '00:59:705'],
     ['01:00:420', '01:00:460'],
+    ['01:00:795', '01:00:835'],
+    ['01:01:165', '01:01:205'],
+    ['01:01:545', '01:01:585'],
+    ['01:01:920', '01:01:960'],
+    ['01:02:290', '01:02:330'],
+    ['01:02:665', '01:02:705'],
+    ['01:03:040', '01:03:080'],
+    ['01:03:415', '01:03:455'],
+    ['01:03:790', '01:03:830'],
+    ['01:04:165', '01:04:205'],
+    ['01:04:545', '01:04:585'],
+    ['01:04:920', '01:04:960'],
+    ['01:05:290', '01:05:330'],
+    ['01:05:665', '01:05:705'],
+    ['01:06:040', '01:06:080'],
+    ['01:06:415', '01:06:455'],
+    ['01:06:790', '01:06:830'],
+    ['01:07:165', '01:04:205'],
+    ['01:07:545', '01:07:585'],
+    ['01:07:920', '01:07:960'],
+    ['01:08:290', '01:08:330'],
+    ['01:08:665', '01:08:705'],
+    ['01:09:040', '01:09:080'],
+    ['01:09:415', '01:09:455'],
+    ['01:09:790', '01:09:830'],
+    ['01:10:165', '01:10:205'],
+    ['01:10:545', '01:10:585'],
+    ['01:10:920', '01:10:960'],
+    ['01:11:290', '01:11:330'],
+    ['01:11:665', '01:11:705'],
+    ['01:12:420', '01:12:460'],
+    ['01:12:795', '01:12:835'],
+    ['01:13:165', '01:13:205'],
+    ['01:13:545', '01:13:585'],
+    ['01:13:920', '01:13:960'],
+    ['01:14:290', '01:14:330'],
+    ['01:14:665', '01:14:705'],
+    ['01:14:040', '01:14:080'],
+    ['01:14:415', '01:14:455'],
+    ['01:14:790', '01:14:830'],
+    ['01:15:165', '01:15:205'],
+    ['01:15:545', '01:15:585'],
 
-    // Continue
-  ];
+    //New Section
+    ['01:15:790', '01:15:830'],
+    ['01:16:165', '01:16:205'],
+    ['01:16:545', '01:16:585'],
+    ['01:16:920', '01:16:960'],
+    ['01:17:105', '01:17:145'],
+    ['01:17:295', '01:17:335'],
+    ['01:17:665', '01:17:705'],
+    ['01:18:045', '01:18:085'],
+    ['01:18:415', '01:18:455'],
+    ['01:18:790', '01:18:830'],
+    ['01:19:165', '01:19:205'],
+    ['01:19:545', '01:19:585'],
+    ['01:19:920', '01:19:960'],
+    ['01:20:290', '01:20:330'],
+    ['01:20:665', '01:20:705'],
+    ['01:21:045', '01:21:085'],
+    ['01:21:415', '01:21:455'],
+    ['01:21:790', '01:21:830'],
+    ['01:22:165', '01:22:205'],
+    ['01:22:545', '01:22:585'],
+    ['01:22:920', '01:22:960'],
+    ['01:23:290', '01:23:330'],
+    ['01:23:665', '01:23:705'],
+    ['01:24:045', '01:24:085'],
+    ['01:24:415', '01:24:455'],
+    ['01:24:790', '01:24:830'],
+    ['01:25:165', '01:25:205'],
+    ['01:25:545', '01:25:585'],
+    ['01:25:920', '01:25:960'],
+    ['01:26:290', '01:26:330'],
+    ['01:26:665', '01:26:705'],
+    ['01:27:045', '01:27:085'],
+  ]; // End at 01:42:000
 
-  // State variables
-  const [playState, setPlayState] = useState(false);
-
-  // Function to parse time string into milliseconds
-  const parseTime = (timeString) => {
-    const [minutes, seconds, milliseconds] = timeString.split(':').map(Number);
-    return minutes * 60000 + seconds * 1000 + milliseconds;
-  };
-
-  // Preprocess inputTimes array to convert time strings to milliseconds
-  const processedInputTimes = inputTimes.map(([startTime, endTime]) => [
-    parseTime(startTime),
-    parseTime(endTime)
-  ]);
-
-  const Video = () => {
-    const handlePlaybackStatusUpdate = (e) => {
-      processedInputTimes.forEach(([startTime, endTime]) => {
-        if (e.positionMillis >= startTime && e.positionMillis <= endTime) {
-          Vibration.vibrate();
-        }
-      });
-      console.log(e.positionMillis);
-    };
-  
-    return (
-      <View style={styles.container}>
-        <VideoPlayer
-          videoProps={{
-            shouldPlay: playState,
-            resizeMode: ResizeMode.COVER,
-            useNativeControls: false,
-            debug: true,
-            source: Europapa,
-          }}
-          playbackCallback={handlePlaybackStatusUpdate} // Pass the function directly
-        />
-      </View>
-    );
-  };
-
-  // Render function
   return (
-    <View style={styles.container}>
-
-      <Video style={styles.videoScreen} />
-      <TouchableWithoutFeedback onPress={() => playState ? setPlayState(false) : setPlayState(true)}>
-        <View style={styles.buttonContainer} >
-          <Text style={styles.buttonText}>
-            {playState ? "Stop" : "Start"}
-          </Text>
-        </View>
-      </TouchableWithoutFeedback>
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" options={{ title: 'Home' }}>
+          {(props) => <HomeScreen {...props} inputTimes={inputTimes} />}
+        </Stack.Screen>
+        <Stack.Screen name="WithVideoPlayer" component={AppWithVideoPlayer} />
+        <Stack.Screen name="WithoutVideoPlayer" component={AppWithoutVideoPlayer} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-}
+};
 
-// Styles
-const styles = StyleSheet.create({
-  container: {
-    flex: 4,
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#ecf0f1",
-    padding: 10,
-  },
-  videoScreen: {
-    width: "100%",
-    height: "100%"
-  },
-
-  buttonContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#FF6D00",
-    width: "20%",
-  },
-  buttonText: {
-    alignContent: "center",
-    color: "white"
-  },
-
-});
+export default App;
